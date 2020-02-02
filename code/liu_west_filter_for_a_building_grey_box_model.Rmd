@@ -3,8 +3,7 @@ title: "Liu-West Filter for a building Grey-box model"
 author: "Sang woo Ham"
 date: "1/28/2020"
 output:
-  md_document:
-    variant: markdown_github
+  pdf_document:
     toc: true
 editor_options: 
   chunk_output_type: console
