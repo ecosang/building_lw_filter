@@ -3,9 +3,9 @@ title: "Liu-West Filter for a building Grey-box model"
 author: "Sang woo Ham"
 date: "1/28/2020"
 output:
-  pdf_document:
-    toc: true
-editor_options: 
+  html_document:
+    toc: yes
+editor_options:
   chunk_output_type: console
 ---
 
@@ -271,10 +271,6 @@ Define parameter lower and upper bounds that create priors.
 |max|30.0|30.0|1000000|10000000|0.1|0.1 |
 
 
-
-
-
-
 ```{r,message=F,warining=F,error=F}
 # define upper and lower bounds of x0 and theta for prior_data.
 max_x_par=c(c(30,30,c(1000000,10000000,.1,0.1)))
@@ -405,7 +401,6 @@ write_rds(prior_state,paste0("data/prior_state.rds"))
 ```
 
 
-## 4. Kernel density approximation of set of pameters
 
 
 ```{r,message=F,warining=F,error=F}
