@@ -35,7 +35,7 @@ All functions used in this code is in `code/utility.R`. Also, all
 generated data and trained model are stored in `data` folder.
 
 
-[Complete code notebook](https://ecosang.github.io/building_lw_filter/notebook.html)
+[Complete code notebook](https://ecosang.github.io/building_lw_filter/filter.html)
 
 Render notebook
 
