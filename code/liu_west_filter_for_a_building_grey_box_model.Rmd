@@ -10,11 +10,12 @@ editor_options:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE,root.dir = rprojroot::find_rstudio_root_file())
+knitr::opts_chunk$set(echo = TRUE) # ,root.dir = rprojroot::find_rstudio_root_file()
 ```
 
-
-```{r,echo=F,warning=F,message=F,results="hide"}
+Loading required pacakges.
+ 
+```{r,echo=T,warning=F,message=F,results="hide"}
 suppressPackageStartupMessages(library(tidyverse)) # data processing
 suppressPackageStartupMessages(library(forcats)) #data processing
 suppressPackageStartupMessages(library(rlang))  #data processing
@@ -60,14 +61,14 @@ All functions used in this code is in `code/utility.R`. Also, all generated data
 # 2. Model description
 
 
+
 ## 2.1 A simple grey-box model with two states.
 
 The grey-model is composed of two states. Below figure shows R-C circuit diagram of this model. All variables are listed below.
 
 ```{r,eval=T,echo=FALSE,warning=FALSE, out.width='50%'}
-#knitr::include_graphics(paste0("data/grey.png")) # getwd(),
+knitr::include_graphics(paste0("../data/grey.png")) # getwd(),
 ```
-
 
 *Variables*
 
@@ -177,9 +178,9 @@ Based on input data ($\textbf{u}_{1:t_K}$), we will generate synthetic observati
 
 ```{r,echo=T,warning=F,message=F,eval=T}
 # load functions
-source("code/utility.r")
+source("../code/utility.r")
 # load input u data.
-dat=readr::read_csv("data/syn_data.csv")
+dat=readr::read_csv("../data/syn_data.csv")
 dt=dat$time[2]-dat$time[1] #discrete time
 # define all true parameters
 x0_true=c(21.0, 15.0) # initial states
@@ -221,7 +222,7 @@ all_data=list(u_mat=u_mat,
 
 # store synthetic data.
 write_rds(list(prior_data=prior_data,filter_data=filter_data,all_data=all_data,index_split=index_split),
-          paste0("data/synthetic_data.rds"))
+          paste0("../data/synthetic_data.rds"))
 
 ```
 
@@ -231,7 +232,7 @@ To see how it looks like, visualize the data with non-stochastic simulation.
 
 ```{r,eval=T,message=F,warining=F,error=F,fig.height=5,fig.width=10}
 # load synthetic (stochastically simluated data)
-synthetic_data<-readr::read_rds(paste0("data/synthetic_data.rds"))
+synthetic_data<-readr::read_rds(paste0("../data/synthetic_data.rds"))
 # load data
 prior_data=synthetic_data$prior_data
 filter_data=synthetic_data$filter_data
@@ -323,7 +324,7 @@ The initial states of `filter_data` is actually the last states of `prior_data`.
 
 ```{r,message=F,warining=F,error=F,eval=T}
 # load results
-sol_list=readr::read_rds(paste0("data/sol_list.rds"))
+sol_list=readr::read_rds(paste0("../data/sol_list.rds"))
 
 
 # sol_list contains intial states and parameters of prior_data.
@@ -393,10 +394,10 @@ prior_par=Rfast::transpose(abs(kdevine::rkdevine(NP, kde_par)))
 prior_state=Rfast::transpose(kdevine::rkdevine(NP, kde_state))
 
 
-write_rds(kde_par,paste0("data/kde_par.rds"))
-write_rds(kde_state,paste0("data/kde_state.rds"))
-write_rds(prior_par,paste0("data/prior_par.rds"))
-write_rds(prior_state,paste0("data/prior_state.rds"))
+write_rds(kde_par,paste0("../data/kde_par.rds"))
+write_rds(kde_state,paste0("../data/kde_state.rds"))
+write_rds(prior_par,paste0("../data/prior_par.rds"))
+write_rds(prior_state,paste0("../data/prior_state.rds"))
 
 ```
 
@@ -406,8 +407,8 @@ write_rds(prior_state,paste0("data/prior_state.rds"))
 ```{r,message=F,warining=F,error=F}
 
 # load generated prior data from the kernel density approximation
-prior_par=readr::read_rds(paste0("data/prior_par.rds"))
-prior_state=readr::read_rds(paste0("data/prior_state.rds"))
+prior_par=readr::read_rds(paste0("../data/prior_par.rds"))
+prior_state=readr::read_rds(paste0("../data/prior_state.rds"))
 NP=dim(prior_par)[2]
 
 
@@ -484,22 +485,21 @@ seed_num=13244 #seed number
 
 ```{r,eval=F}
 # seed=seed_num
-#res=lw_ss_filter(inputs=inputs,NP=NP,pii=pii,x=x,theta=theta,wt=wt,seed=seed_num,training=TRUE)
 res=lw_ss_filter(inputs=inputs,NP=NP,pii=pii,x=x,theta=theta,delta=delta,seed=seed_num,training=TRUE)
 
 
-
+# split data to reduce file size
 for(i in 1:dim(res$r_thetas)[1]){
-  write_rds(res$r_thetas[i,,],paste0("data/res_thetas_",i,".rds"))
+  write_rds(res$r_thetas[i,,],paste0("../data/res_thetas_",i,".rds"))
 }
 for(i in 1:dim(res$xs)[1]){
-  write_rds(res$xs[i,,],paste0("data/res_xs_",i,".rds"))
+  write_rds(res$xs[i,,],paste0("../data/res_xs_",i,".rds"))
 }
 
 res$thetas<-NULL
 res$r_thetas<-NULL
 res$xs<-NULL
-write_rds(res,"data/res.rds")
+write_rds(res,"../data/res.rds")
 
 ```
 
@@ -511,21 +511,17 @@ write_rds(res,"data/res.rds")
 
 ```{r}
 
-res=read_rds("data/res.rds")
+res=read_rds("../data/res.rds")
 
 res$r_thetas=array(data=0,dim=c(length(par_names),NP,dim(filter_data$u_mat)[2]))
 res$xs=array(data=0,dim=c(length(state_names),NP,dim(filter_data$u_mat)[2]))
 for (i in 1:length(par_names)){
-  res$r_thetas[i,,]=read_rds(paste0("data/res_thetas_",i,".rds"))
+  res$r_thetas[i,,]=read_rds(paste0("../data/res_thetas_",i,".rds"))
 }
 
 for (i in 1:length(state_names)){
-  res$xs[i,,]=read_rds(paste0("data/res_xs_",i,".rds"))
+  res$xs[i,,]=read_rds(paste0("../data/res_xs_",i,".rds"))
 }
-# res$xs[1,,]%>%colMeans%>%plot(type='l')
-# filter_data$y_mat%>%points(type='l',col="red")
-# res$xs[2,,]%>%colMeans%>%plot()
-
 
 
 #theta_quantile=res$thetas%>%apply(MARGIN=c(2,3),function (x) quantile(x,c(0.025,0.5,0.975)))

@@ -42,5 +42,5 @@ Render notebook
 ```{r}
 #with .Rproj
 rmarkdown::render(input='code/liu_west_filter_for_a_building_grey_box_model.Rmd', 
-output_file = '../docs/notebook.html',knit_root_dir = getwd())
+output_file = '../docs/notebook.html')
 ```
