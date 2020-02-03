@@ -64,11 +64,13 @@ All functions used in this code is in `code/utility.R`. Also, all generated data
 
 ## 2.1 A simple grey-box model with two states.
 
-The grey-model is composed of two states. Below figure shows R-C circuit diagram of this model. All variables are listed below.
+The grey-model is composed of two states. Below figure shows R-C circuit diagram of this model. 
 
 ```{r,eval=T,echo=FALSE,warning=FALSE, out.width='50%'}
 knitr::include_graphics(paste0("../data/grey.png")) # getwd(),
 ```
+
+All variables are listed below.
 
 *Variables*
 

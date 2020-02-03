@@ -40,7 +40,7 @@ generated data and trained model are stored in `data` folder.
 Render notebook
 
 ```{r}
-#with .Rproj
+#with .Rproj . install pandoc >2.9
 rmarkdown::render(input='code/liu_west_filter_for_a_building_grey_box_model.Rmd', 
-output_file = '../docs/notebook.html')
+output_file = '../docs/filter.html')
 ```
