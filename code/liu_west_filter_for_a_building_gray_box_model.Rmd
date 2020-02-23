@@ -228,7 +228,7 @@ write_rds(list(prior_data=prior_data,filter_data=filter_data,all_data=all_data,i
 
 To see how it looks like, visualize the data with non-stochastic simulation. 
 
-```{r,eval=T,message=F,warining=F,error=F,fig.height=4.5,fig.width=10}
+```{r,eval=T,message=F,warining=F,error=F,fig.height=4,fig.width=10,echo=F}
 # load synthetic (stochastically simluated data)
 synthetic_data<-readr::read_rds(paste0("../data/synthetic_data.rds"))
 # load data
@@ -357,7 +357,7 @@ After getting initial states for `filter_data`, visualize the results. As you ca
 
 One distrinct advantage of this approach is it can capture the correlation betwen parameters in a prior distribution. For example, $R_{\text{ie}}$ is highly correlated with $R_{\text{ea}}$. 
 
-```{r,message=F,warining=F,error=F,eval=T,fig.width=8,fig.height=8,echo=F}
+```{r,message=F,warining=F,error=F,eval=T,fig.width=8,fig.height=6.5,echo=F}
 # data_frame for visualization
 par_df_plot<-par_df%>%mutate(type="data")
 # add true parameter into data frame for visualization
@@ -403,7 +403,7 @@ write_rds(prior_state,paste0("../data/prior_state.rds"))
 
 Visualization of generated particles. The generated prior particles (gray dots) cover wider ranges than optimization results while it captures the correlation between parameters. 
 
-```{r,message=F,warining=F,error=F,fig.width=8,fig.height=8,echo=F}
+```{r,message=F,warining=F,error=F,fig.width=8,fig.height=6.5,echo=F}
 
 # load generated prior data from the kernel density approximation
 prior_par=readr::read_rds(paste0("../data/prior_par.rds"))
