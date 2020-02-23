@@ -22,13 +22,14 @@ suppressPackageStartupMessages(library(rlang))  #data processing
 suppressPackageStartupMessages(library(readr)) #data processing
 suppressPackageStartupMessages(library(lubridate)) #datetime date handling
 suppressPackageStartupMessages(library(ggforce)) #visualization
+suppressPackageStartupMessages(library(patchwork)) #visualization
 suppressPackageStartupMessages(library(expm)) #fast matrix exponential 
 suppressPackageStartupMessages(library(lhs))  #latin-hyper cube sampling 
 suppressPackageStartupMessages(library(Rfast)) #fast matrix algebra
 suppressPackageStartupMessages(library(parallel)) #parallel particle filter
 suppressPackageStartupMessages(library(DEoptim)) #parallel particle filter
-suppressPackageStartupMessages(library(ggforce))
 suppressPackageStartupMessages(library(kdevine)) #kernel density approximation for 4.4
+
 ```
 
 # 1. Introduction
@@ -356,7 +357,7 @@ After getting initial states for `filter_data`, visualize the results. As you ca
 
 One distrinct advantage of this approach is it can capture the correlation betwen parameters in a prior distribution. For example, $R_{\text{ie}}$ is highly correlated with $R_{\text{ea}}$. 
 
-```{r,message=F,warining=F,error=F,eval=T}
+```{r,message=F,warining=F,error=F,eval=T,fig.width=10,fig.height=10,echo=F}
 # data_frame for visualization
 par_df_plot<-par_df%>%mutate(type="data")
 # add true parameter into data frame for visualization
@@ -402,8 +403,7 @@ write_rds(prior_state,paste0("../data/prior_state.rds"))
 
 Visualization of generated particles. The generated prior particles (gray dots) cover wider ranges than optimization results while it captures the correlation between parameters. 
 
-
-```{r,message=F,warining=F,error=F}
+```{r,message=F,warining=F,error=F,fig.width=10,fig.height=10,echo=F}
 
 # load generated prior data from the kernel density approximation
 prior_par=readr::read_rds(paste0("../data/prior_par.rds"))
@@ -434,6 +434,8 @@ ggplot(par_df_plot2, aes(x = .panel_x, y = .panel_y,color=type,fill=type)) +
   theme_bw()+theme(axis.text.x = element_text(angle = 90))
 
 ```
+
+
 
 # 5. Liu-West filter
 
@@ -511,11 +513,12 @@ write_rds(res,"../data/res.rds")
 
 ## 5.3 Visualize filter results
 
-Visualize the filter results and compare with true paraemter values.
+Visualize the filter results and compare with true paraemter values. When the filter moves, the posterior distribution updates and is narrower with data. As can be seen the graph, the true parameter value (red horizontal line) is within the posterior distribution, and we can confirm the proposed method can be applicable to the simple gray-box model of a building.
 
 
-```{r,message=F,warining=F,error=F,eval=T}
+```{r,message=F,warining=F,error=F,eval=T,fig.width=10,fig.height=8,echo=F}
 
+# load filter results
 res=read_rds("../data/res.rds")
 
 res$r_thetas=array(data=0,dim=c(length(par_names),NP,dim(filter_data$u_mat)[2]))
@@ -528,25 +531,48 @@ for (i in 1:length(state_names)){
   res$xs[i,,]=read_rds(paste0("../data/res_xs_",i,".rds"))
 }
 
-
-#theta_quantile=res$thetas%>%apply(MARGIN=c(2,3),function (x) quantile(x,c(0.025,0.5,0.975)))
+# calculate 0.025, 0.5, 0.975 quantiles
 rtheta_quantile=res$r_thetas%>%apply(MARGIN=c(1,3),function (x) quantile(x,c(0.025,0.5,0.975)))
-#par_names=names(par_recover_lw(1,res$lw_mean,res$lw_sd))
-par_name=c("Ci","Ce","Rie","Rea")
+par_name=c("Ci","Ce","Rie","Rea") # 
+par_labs=c(expression(paste(italic(C)[i]," [J/K]")),
+           expression(paste(italic(C)[e]," [J/K]")),
+           expression(paste(italic(R)[ie]," [K/W]")),
+           expression(paste(italic(R)[ea]," [K/W]")))
 
-for (i in 1:4){
+# add for loop
+for (i in 1:length(par_name)){
   theta_idx=i
-  plot(rtheta_quantile[2,theta_idx,],col="black",type="l",ylim=c(min(rtheta_quantile[,theta_idx,],par_true[theta_idx]),max(rtheta_quantile[,theta_idx,],par_true[theta_idx])),
-       ylab=paste0(par_name[theta_idx]))
-  lines(rtheta_quantile[1,theta_idx,],col="blue")
-  lines(rtheta_quantile[3,theta_idx,],col="blue")
-  abline(h=par_true[theta_idx],col="red")
+  cols <- c("Median" = "black","Lower"="blue","Upper"="blue","True"="red")
+  plot_df=tibble(Median=rtheta_quantile[2,theta_idx,],Lower=rtheta_quantile[1,theta_idx,],Upper=rtheta_quantile[3,theta_idx,],True=par_true[theta_idx])%>%mutate(time=row_number()/4/24)
+  
+  
+  gg=ggplot(plot_df%>%gather(key=label,value,-time),aes(time,value,color=label))+geom_line(size=0.3)+
+    scale_color_manual(values = cols)+
+    ylab(par_labs[theta_idx])+xlab("time [Days]")+
+    theme(axis.text.x = element_text(angle = 0, hjust = 1,vjust=.5,size=10), # angle = 0, hjust = 1,vjust=.5,
+          axis.text.y = element_text(size=10),
+          axis.title.y= element_text(size=12),
+          axis.title.x= element_text(size=12),
+          legend.position="bottom",
+          legend.direction="horizontal",
+          legend.text=element_text(size=8),
+          legend.title = element_blank(),
+          legend.key = element_rect(colour = "transparent", fill = "white"),
+          panel.background = element_rect(fill  = "white", colour = "grey80"),
+          panel.grid.major.y= element_line(colour = "grey80",size=.3),
+          panel.grid.minor.y= element_line(colour = "grey80",size=.2),
+          panel.grid.major.x= element_line(colour = "grey80",size=.3)
+    )+scale_y_continuous(expand=c(0,0))
+  
+    assign(paste0("g",i),gg)
 }
 
+(g1|g2)/
+  (g3|g4)
 
 ```
 
-# 6. Conclusion and discussion
+# 6. Conclusion
 
-In this example, our major goal is to see the proposed method can be applicable in a 
+In this document, we create a synthetic dataset from a simple building gray-box model and apply Liu-West filter to find posterior distribution of parameters. By making a comparison with the true parameter, we demonstrate the filter can be used in this applicaiton. 
 
