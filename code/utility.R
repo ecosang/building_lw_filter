@@ -296,7 +296,7 @@ lw_ss_filter<-function(inputs,NP,pii,x,theta,delta=0.90,seed=13234,...){
       cov_theta=(cov_theta+t(cov_theta))/2 #make symmetric
       Vtheta=h^2*cov_theta #h^2 is multiplied (see line 12)
       # prevent particle degeneration. see 5. Discussion in the paper
-      diag(Vtheta)=if_else(diag(Vtheta)<1e-7,1e-7,0)+diag(Vtheta) 
+      diag(Vtheta)=if_else(diag(Vtheta)<1e-8,1e-8,0)+diag(Vtheta) 
       
       # Line 7
       # Parallel apply see below link
