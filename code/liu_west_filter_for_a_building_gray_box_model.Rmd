@@ -34,7 +34,7 @@ suppressPackageStartupMessages(library(kdevine)) #kernel density approximation f
 
 # 1. Introduction
 
-This is accompanies code of *Appendix C* in paper ["Ham, S. woo, & Karava, P. (2020). Online model for unit-level heating and cooling energy use prediction in multi-family residential buildings for eco-feedback design. Submitted to Journal of Energy and Buildings."](https://dx.doi.org/). This is a simple demonstaration of Liu-West filter for a simple building gray-box model. We generated a synthetic data and applied Liu-West filter to see if the filter can be applicable for this problem. All code is written in `R` language. The main purpose of this document is to provide reproducible example. 
+This is accompanies toy example code of section 3.2 in paper ["Ham, S. woo, & Karava, P. (2020). Online model for unit-level heating and cooling energy use prediction in multi-family residential buildings for eco-feedback design. Submitted to Journal of Energy and Buildings."](https://dx.doi.org/). This is a simple demonstaration of Liu-West filter for a simple building gray-box model. We generated a synthetic data and applied Liu-West filter to see if the filter can be applicable for this problem. All code is written in `R` language. The main purpose of this document is to provide reproducible example. 
 
 The pacakge depedency of this code is managed by `renv` package. You can look at `renv.lock` file to see the required package. However, for the simplicity, just run following script on this rproject. 
 
@@ -131,7 +131,7 @@ $$
 y_{x_\text{i},t_k}=\underbrace{\begin{bmatrix}1&0\end{bmatrix}}_{\textbf{C}}\begin{bmatrix}x_{\text{i},t_k}\\x_{\text{e},t_k}\end{bmatrix}+\varepsilon_{y,t_k}
 $$
 
-Since this system is a linear gaussian model, it can be discretized without integration (see Appendix B of paper) (or this [link](https://github.com/ecosang/misc/blob/master/discretization.pdf)). Here, subscript $_d$ indicates discretization. $\textbf{x}_{t_k}=\left[x_{\text{i},t_k},\,x_{\text{e},t_k}\right]^\intercal$, $\textbf{u}_{t_k}=\left[T_{\text{a}},\dot{Q}_{\text{hc}}\right]^\intercal$, and $\boldsymbol{\theta}=\{R_{\text{ie}}, R_{\text{ea}}, C_{\text{e}}, C_{\text{i}}, \sigma_\text{i}, \sigma_\text{e}\}$
+Since this system is a linear gaussian model, it can be discretized without integration (see section 3.1 of paper) (or this [link](https://github.com/ecosang/misc/blob/master/discretization.pdf)). Here, subscript $_d$ indicates discretization. $\textbf{x}_{t_k}=\left[x_{\text{i},t_k},\,x_{\text{e},t_k}\right]^\intercal$, $\textbf{u}_{t_k}=\left[T_{\text{a}},\dot{Q}_{\text{hc}}\right]^\intercal$, and $\boldsymbol{\theta}=\{R_{\text{ie}}, R_{\text{ea}}, C_{\text{e}}, C_{\text{i}}, \sigma_\text{i}, \sigma_\text{e}\}$
 
 $$P(\textbf{x}_{t_k+1}|\textbf{x}_{t_k})=\mathcal{N}(\textbf{x}_{t_k+1}|f_d\left(\textbf{x}_{t_k},\textbf{u}_{t_k},\boldsymbol{\theta}\right),\boldsymbol{\sigma}_{\text{d},x})$$
 
