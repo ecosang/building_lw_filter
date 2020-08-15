@@ -34,7 +34,7 @@ suppressPackageStartupMessages(library(kdevine)) #kernel density approximation f
 
 # 1. Introduction
 
-This is accompanies code of *Appendix C* in paper ["xxx"](https://dx.doi.org/). This is a simple demonstaration of Liu-West filter for a simple building gray-box model. We generated a synthetic data and applied Liu-West filter to see if the filter can be applicable for this problem. All code is written in `R` language. The main purpose of this document is to provide reproducible example. 
+This is accompanies code of *Appendix C* in paper ["Ham, S. woo, & Karava, P. (2020). Online model for unit-level heating and cooling energy use prediction in multi-family residential buildings for eco-feedback design. Submitted to Journal of Energy and Buildings."](https://dx.doi.org/). This is a simple demonstaration of Liu-West filter for a simple building gray-box model. We generated a synthetic data and applied Liu-West filter to see if the filter can be applicable for this problem. All code is written in `R` language. The main purpose of this document is to provide reproducible example. 
 
 The pacakge depedency of this code is managed by `renv` package. You can look at `renv.lock` file to see the required package. However, for the simplicity, just run following script on this rproject. 
 
@@ -91,9 +91,9 @@ All variables are listed below.
 
 The thermal dynamics are expressed with below system of differntial equations. Here, $R$ is thermal resistance and $C$ is thermal capacitance. 
 
-$$\frac{ dx_{\text{i}} }{dt} =\left( \frac{1}{R_{\text{ie}} C_{\text{i}}}(x_\text{e}-x_\text{i}) +\frac{1}{C_{\text{i}}} \dot{Q}_{\text{hc}} \right)+\sigma_i \frac{d\omega}{dt}$$
+$$ dx_{\text{i},t} =\left( \frac{1}{R_{\text{ie}} C_{\text{i}}}(x_{\text{e},t}-x_{\text{i},t}) +\frac{1}{C_{\text{i}}} \dot{Q}_{\text{hc},t} \right)dt+\sigma_i d\omega_{\text{i},t} $$
 
-$$\frac{dx_{\text{e}}}{dt}=\left( \frac{1}{R_{\text{ie}} C_{\text{e}}}(x_\text{i}-x_\text{e})+ \frac{1}{R_{\text{ea}} C_{\text{e}}}+(T_{\text{out}}-x_\text{e})  \right)+\sigma_e \frac{d\omega}{dt}$$
+$$dx_{\text{e},t}=\left( \frac{1}{R_{\text{ie}} C_{\text{e}}}(x_{\text{i},t}-x_{\text{e},t})+ \frac{1}{R_{\text{ea}} C_{\text{e}}}+(T_{\text{out},t}-x_{\text{e},t})  \right)dt+\sigma_ed\omega_{\text{e}}$$
 
 $$y_{x_\text{i},t_k}=x_{\text{i},t_k}+\varepsilon_{y,t_k} \text{ where } \,\varepsilon_{y,t_k}\sim\mathcal{N}(0,\sigma_{\text{d},y})$$
 
@@ -123,8 +123,8 @@ T_{\text{out},t}  \\
 \dot{Q}_{\text{hc},t}   
 \end{bmatrix}+
 \begin{bmatrix} 
-\sigma_{i}\dot{\boldsymbol{\omega}}_{t}  \\ 
-\sigma_{e}\dot{\boldsymbol{\omega}}_{t}   
+\sigma_{i}\dot{\boldsymbol{\omega}}_{\text{i},t}  \\ 
+\sigma_{e}\dot{\boldsymbol{\omega}}_{\text{e},t}   
 \end{bmatrix}$$
 
 $$
