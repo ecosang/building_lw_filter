@@ -176,7 +176,7 @@ In the model, we will use fixed value of $\sigma_{\text{d},y}$ because the measu
 
 Based on input data ($\textbf{u}_{1:t_K}$), we will generate synthetic observation data by using a stochastic simulation. 
 
-```{r,echo=T,warning=F,message=F,eval=T}
+```{r,echo=T,warning=F,message=F,eval=T eval=T, message=FALSE, warning=FALSE, r,echo=T}
 # load functions
 source("../code/utility.r")
 # load input u data.
