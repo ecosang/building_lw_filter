@@ -1,7 +1,5 @@
 
-This is accompanies code of *Appendix B* in paper [“Ham, S.-W., Karava, P., Bilionis, I., and Braun, J. (2020). Real-time model for unit-level heating and cooling energy prediction in  multi-family residential housing for eco-feedback design. Submitted to Journal of Building Performance Simulation.”](https://dx.doi.org/). This is a simple demonstaration of
-
-Liu-West filter for a simple building gray-box model. We generated a synthetic data and applied Liu-West filter to see if the filter can be applicable for this problem. All code is written in `R` language. The main purpose of this document is to provide reproducible example.
+This is accompanies code of *Appendix B* in paper [“Ham, S.-W., Karava, P., Bilionis, I., and Braun, J. (2020). Real-time model for unit-level heating and cooling energy prediction in  multi-family residential housing for eco-feedback design. Submitted to Journal of Building Performance Simulation.”](https://dx.doi.org/). This is a simple demonstaration of Liu-West filter for a simple building gray-box model. We generated a synthetic data and applied Liu-West filter to see if the filter can be applicable for this problem. All code is written in `R` language. The main purpose of this document is to provide reproducible example.
 
 The pacakge depedency of this code is managed by `renv` package. You can look at `renv.lock` file to see the required package. However, for the simplicity, just run following script on this rproject.
 
